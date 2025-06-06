@@ -1,0 +1,32 @@
+# Data Processing Configuration
+
+# Corpus Settings
+corpus:
+  raw_dir: "data/corpus/raw"
+  processed_dir: "data/corpus/processed"
+  validation_dir: "data/corpus/validation"
+  file_pattern: "*.jsonl.gz"
+  batch_size: 1000
+
+# Preprocessing Settings
+preprocessing:
+  min_segment_length: 100
+  max_segment_length: 1000
+  sentence_window: 10
+  sentence_stride: 5
+  remove_html: true
+  normalize_whitespace: true
+  lowercase: false
+
+# Validation Settings
+validation:
+  check_md5: true
+  validate_json: true
+  sample_size: 1000
+  log_dir: "logs/data_processing"
+
+# Storage Settings
+storage:
+  cache_dir: "data/cache"
+  temp_dir: "data/temp"
+  max_cache_size: "10GB" 

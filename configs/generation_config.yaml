@@ -1,0 +1,43 @@
+# Generation Configuration
+
+# Model Settings
+model:
+  name: "mistralai/Mistral-7B-Instruct-v0.2"
+  device: "cuda"  # or "cpu"
+  batch_size: 1
+  max_length: 2048
+  temperature: 0.7
+  top_p: 0.9
+  top_k: 50
+
+# Context Settings
+context:
+  max_segments: 5
+  max_tokens: 2048
+  include_title: true
+  include_headings: true
+  citation_format: "inline"  # or "footnote"
+
+# Generation Settings
+generation:
+  max_new_tokens: 512
+  num_beams: 4
+  length_penalty: 1.0
+  repetition_penalty: 1.2
+  do_sample: true
+
+# Output Settings
+output:
+  run_dir: "runs/generation"
+  format: "json"
+  include_citations: true
+  include_confidence: true
+
+# Evaluation Settings
+evaluation:
+  metrics:
+    - "rouge"
+    - "bleu"
+    - "citation_accuracy"
+  reference_dir: "data/references"
+  output_dir: "runs/evaluation" 

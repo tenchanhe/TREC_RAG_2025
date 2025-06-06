@@ -1,0 +1,16 @@
+[project]
+name = "trec-rag-2025"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pyserini>=1.0.0",
+    "pytrec-eval>=0.5",
+    "tqdm>=4.67.1",
+]
+
+[dependency-groups]
+dev = [
+    "ipdb>=0.13.13",
+]

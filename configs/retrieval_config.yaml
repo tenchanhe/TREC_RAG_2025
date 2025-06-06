@@ -1,0 +1,42 @@
+# Retrieval Configuration
+
+# BM25 Settings
+bm25:
+  index_dir: "indexes/bm25"
+  k1: 0.9
+  b: 0.4
+  threads: 8
+  store_positions: true
+  store_docvectors: true
+  store_raw: true
+
+# Dense Retrieval Settings
+dense:
+  index_dir: "indexes/dense"
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  batch_size: 32
+  max_length: 512
+  device: "cuda"  # or "cpu"
+  normalize_embeddings: true
+
+# Hybrid Retrieval Settings
+hybrid:
+  index_dir: "indexes/hybrid"
+  sparse_weight: 0.5
+  dense_weight: 0.5
+  fusion_method: "rrf"  # or "weighted"
+  k: 1000
+
+# Query Processing
+query:
+  max_length: 512
+  lowercase: false
+  remove_stopwords: true
+  expand_queries: false
+
+# Output Settings
+output:
+  run_dir: "runs/retrieval"
+  format: "trec"
+  max_results: 1000
+  include_scores: true 
