@@ -32,26 +32,26 @@ check_command() {
 check_command python
 check_command pip
 
-# Check if virtual environment exists
-if [ ! -d ".venv" ]; then
-    log "Creating virtual environment..."
-    python -m venv .venv
-fi
+# # Check if virtual environment exists
+# if [ ! -d ".venv" ]; then
+#     log "Creating virtual environment..."
+#     python -m venv .venv
+# fi
 
-# Activate virtual environment
-log "Activating virtual environment..."
-source .venv/bin/activate
+# # Activate virtual environment
+# log "Activating virtual environment..."
+# source .venv/bin/activate
 
-# Install/update dependencies
-log "Installing dependencies..."
-pip install -r requirements.txt
+# # Install/update dependencies
+# log "Installing dependencies..."
+# pip install -r requirements.txt
 
 # Run each step
 log "Starting pipeline execution..."
 
-# Step 1: Data Processing
-log "Step 1: Data Processing"
-./scripts/step1_process_data.sh "$TIMESTAMP" "$CONFIG_DIR" "$LOG_DIR"
+# # Step 1: Data Processing
+# log "Step 1: Data Processing"
+# ./scripts/step1_process_data.sh "$TIMESTAMP" "$CONFIG_DIR" "$LOG_DIR"
 
 # Step 2: Build Indices
 log "Step 2: Building Indices"
@@ -73,9 +73,9 @@ log "Step 5: Running RAG Task"
 log "Step 6: Running Evaluation"
 ./scripts/step6_run_evaluation.sh "$TIMESTAMP" "$CONFIG_DIR" "$LOG_DIR"
 
-# Step 7: Generate Report
-log "Step 7: Generating Final Report"
-./scripts/step7_generate_report.sh "$TIMESTAMP" "$CONFIG_DIR" "$LOG_DIR"
+# # Step 7: Generate Report
+# log "Step 7: Generating Final Report"
+# ./scripts/step7_generate_report.sh "$TIMESTAMP" "$CONFIG_DIR" "$LOG_DIR"
 
 log "Pipeline completed successfully!"
 log "Results are available in runs/evaluation/report_${TIMESTAMP}.md" 

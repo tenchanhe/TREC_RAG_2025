@@ -1,3 +1,8 @@
+# MODEL
+pretrained_model/
+temp_output/
+test_index/
+
 # Python
 __pycache__/
 *.py[cod]

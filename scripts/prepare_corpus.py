@@ -34,7 +34,7 @@ def process_file(input_file):
 
 def main():
     # 設定目錄
-    input_dir = Path("data/corpus/msmarco_v2.1_doc_segmented")
+    input_dir = Path("/tmp2/TREC_RAG2025/corpus/msmarco_v2.1_doc_segmented")
     output_dir = Path("data/corpus/processed")
     output_dir.mkdir(parents=True, exist_ok=True)
 

@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 設定目錄
-TOPICS_FILE="data/topics/topics.rag24.test.txt"
+# TOPICS_FILE="data/topics/topics.rag24.test.txt"
+TOPICS_FILE="/tmp2/TREC_RAG2025/topics/topics.rag24.test.txt"
 INDEX_DIR="indexes/bm25"
 RUN_DIR="runs/retrieval"
 LOG_DIR="logs/retrieval"

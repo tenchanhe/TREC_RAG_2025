@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # 設定目錄
-QRELS_FILE="data/qrels/qrels.rag24.test-umbrela-all.txt"
+# QRELS_FILE="data/qrels/qrels.rag24.test-umbrela-all.txt"
+QRELS_FILE="/tmp2/TREC_RAG2025/qrels/qrels.rag24.test-umbrela-all.txt"
 RUN_FILE="runs/retrieval/bm25_run.txt"
 EVAL_DIR="runs/evaluation"
 LOG_DIR="logs/evaluation"
