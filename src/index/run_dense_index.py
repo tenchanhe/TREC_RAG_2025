@@ -66,6 +66,8 @@ def create_corpus_embeddings_resumable(
             processed_files.add(original_path)
 
     files_to_process = sorted(list(all_source_files - processed_files))
+    # print(processed_files)
+    # print(files_to_process)
     
     if not files_to_process:
         print("All files have already been processed and indexed.")
@@ -186,7 +188,7 @@ def merge_temp_files(temp_output_folder, output_embeddings_path, output_ids_path
 
 if __name__ == '__main__':
     # --- 設定 ---
-    CORPUS_FOLDER = 'data/corpus/processed/'
+    CORPUS_FOLDER = 'data/corpus/processed'
     MODEL_NAME = 'pretrained_model/sentence-transformers/all-MiniLM-L6-v2/'
     
     # 暫存與最終輸出路徑

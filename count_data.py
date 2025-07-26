@@ -61,6 +61,6 @@ def analyze_msmarco_file(file_path, sample_size=5):
         print(f"分析文件時出錯: {str(e)}")
 
 if __name__ == "__main__":
-    file_path = "./data/corpus/processed/msmarco_v2.1_doc_segmented_00.json.gz"
+    file_path = "/tmp2/TREC_RAG2025/corpus/processed/msmarco_v2.1_doc_segmented_00.json.gz"
     # file_path = "/tmp2/TREC_RAG2025/corpus/msmarco_v2.1_doc_segmented/msmarco_v2.1_doc_segmented_00.json.gz"
     analyze_msmarco_file(file_path)

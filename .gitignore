@@ -1,7 +1,11 @@
-# MODEL
+# OTHER
 pretrained_model/
 temp_output/
 test_index/
+test/
+index_dense/
+index_triplets/
+cache/
 
 # Python
 __pycache__/

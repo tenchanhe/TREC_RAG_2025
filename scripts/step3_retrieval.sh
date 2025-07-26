@@ -1,10 +1,11 @@
 #!/bin/bash
 
 # 設定目錄
-# TOPICS_FILE="data/topics/topics.rag24.test.txt"
-TOPICS_FILE="/tmp2/TREC_RAG2025/topics/topics.rag24.test.txt"
+TOPICS_FILE="data/topics/test_topic.txt"
+# TOPICS_FILE="/tmp2/TREC_RAG2025/topics/topics.rag24.test.txt"
 INDEX_DIR="indexes/bm25"
-RUN_DIR="runs/retrieval"
+# RUN_PATH="runs/retrieval/bm25_run.txt"
+RUN_PATH="runs/retrieval/bm25_run_10q.txt"
 LOG_DIR="logs/retrieval"
 
 # 創建必要的目錄
@@ -18,7 +19,7 @@ echo "開始檢索: $(date)" | tee -a $LOG_DIR/retrieval.log
 python -m pyserini.search.lucene \
     --index $INDEX_DIR \
     --topics $TOPICS_FILE \
-    --output $RUN_DIR/bm25_run.txt \
+    --output $RUN_PATH \
     --bm25 \
     --hits 1000 \
     2>&1 | tee -a $LOG_DIR/retrieval.log

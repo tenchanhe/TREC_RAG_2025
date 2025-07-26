@@ -1,16 +1,25 @@
 import pytrec_eval
 import json
 
+# run_file = "runs/retrieval/dense_keyword.txt"
+# run_file = "runs/retrieval/dense_keyword_sentence.txt"
+# run_file = "runs/retrieval/dense_10q.txt"
+run_file = "runs/retrieval/dense_query_rewrite.txt"
+
 # 讀取 qrels 和 run 檔案
 with open('/tmp2/TREC_RAG2025/qrels/qrels.rag24.test-umbrela-all.txt', 'r') as f:
     qrels = pytrec_eval.parse_qrel(f)
-with open('./runs/retrieval/bm25_run.txt', 'r') as f:
+with open(run_file, 'r') as f:
     run = pytrec_eval.parse_run(f)
 
 # 設定評估指標
 metrics = {
     'map': 'map',
     'ndcg_cut_10': 'ndcg_cut_10',
+    'ndcg_cut_100': 'ndcg_cut_10',
+    'ndcg_cut_1000': 'ndcg_cut_10',
+    'recall_10': 'recall_10',
+    'recall_100': 'recall_100',
     'recall_1000': 'recall_1000'
 }
 
