@@ -2,16 +2,17 @@ import ollama
 import jsonlines
 import re, unicodedata, tqdm
 
-PROMPT_TEMPLETE = """Extract {min_keywords} to {max_keywords} highly relevant keywords from the following text.
-                        Format the output strictly as a Python list of strings.
-                        Each keyword should be a distinct, important term or short phrase (up to {max_keywords} words).
-                        Do NOT include any introductory phrases, explanations, or additional text.
-                        Example output format: ['keyword one', 'keyword two', 'keyword three']
+PROMPT_TEMPLETE = \
+"""Extract {min_keywords} to {max_keywords} highly relevant keywords from the following text.
+Format the output strictly as a Python list of strings.
+Each keyword should be a distinct, important term or short phrase (up to {max_keywords} words).
+Do NOT include any introductory phrases, explanations, or additional text.
+Example output format: ["keyword one", "keyword two", "keyword three"]
 
-                        Text:
-                        {content}
+Text:
+{content}
 
-                        Keywords:"""
+Keywords:"""
 
 def split_into_sentences(text, split):
     if split:
@@ -74,17 +75,17 @@ def extract_keywords_from_jsonl(input_filepath, output_filepath, ollama_model_na
 
             if split_segment:
                 min_keywords=1
-                max_keywords=5
+                max_keywords=3
                 content = split_into_sentences(content, True)
                 for sentence in content:
                     prompt = PROMPT_TEMPLETE.format(min_keywords=min_keywords, max_keywords=max_keywords, content=sentence)
                     response = call_llm(prompt, ollama_model_name)
                     results.append({
                         "id": item_id,
-                        "keywords": response
+                        "keywords": response,
+                        "sentence": sentence
                     })
 
-                
             else:
                 min_keywords=5
                 max_keywords=10
@@ -104,10 +105,11 @@ def extract_keywords_from_jsonl(input_filepath, output_filepath, ollama_model_na
     print("所有結果已成功保存！")
 
 if __name__ == "__main__":
-    # 定義輸入和輸出檔案的路徑
-    input_file = "data/segment/dense_10q.jsonl"
-    output_file = "data/kg/keywords_sentence.jsonl"
-    MODEL = "llama3.2"
-    split = True
+    # # 定義輸入和輸出檔案的路徑
+    # input_file = "data/segment/dense_10q.jsonl"
+    # output_file = "data/kg/keywords_sentences.jsonl"
+    # MODEL = "phi4-mini:latest"
+    # # MODEL = "phi4"
+    # split = True
 
     extract_keywords_from_jsonl(input_file, output_file, MODEL, split)

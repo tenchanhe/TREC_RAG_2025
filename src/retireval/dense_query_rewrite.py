@@ -7,7 +7,8 @@ import re
 import sys
 import os
 import pickle
-import gc
+import gc, ast
+from src.utils.normalized_list import normalize_to_list
 
 # --- embedding 輔助函數 ---
 def mean_pooling(model_output, attention_mask):
@@ -16,7 +17,7 @@ def mean_pooling(model_output, attention_mask):
     return torch.sum(token_embeddings * input_mask_expanded, 1) / torch.clamp(input_mask_expanded.sum(1), min=1e-9)
 
 def get_sentence_embeddings(sentences, tokenizer, model, device):
-    """計算給定句子的 sentence embeddings。"""
+    """計算給定句子的 sentence embeddings"""
     if not sentences:
         return torch.tensor([])
     encoded_input = tokenizer(sentences, padding=True, truncation=True, return_tensors='pt').to(device)
@@ -34,7 +35,7 @@ def load_queries(query_filepath):
     return queries
 
 def load_jsonl_batch(filepath, start_idx, batch_size):
-    """從 JSONL 檔案載入指定範圍的資料批次。"""
+    """從 JSONL 檔案載入指定範圍的資料批次"""
     data = []
     with jsonlines.open(filepath) as reader:
         for i, item in enumerate(reader):
@@ -73,10 +74,10 @@ def process_embeddings_in_batches(data_file, embedding_type, tokenizer, model, d
     
     cache_file = os.path.join(cache_dir, f"{embedding_type}_embeddings.pkl")
     
-    # 如果快取存在且不強制重新計算，則載入快取
-    if not force_recompute and os.path.exists(cache_file):
-        print(f"載入 {embedding_type} embeddings 快取...")
-        return load_embeddings_cache(cache_file)
+    # # 如果快取存在且不強制重新計算，則載入快取
+    # if not force_recompute and os.path.exists(cache_file):
+    #     print(f"載入 {embedding_type} embeddings 快取...")
+    #     return load_embeddings_cache(cache_file)
     
     print(f"計算 {embedding_type} embeddings...")
     total_lines = count_jsonl_lines(data_file)
@@ -93,7 +94,14 @@ def process_embeddings_in_batches(data_file, embedding_type, tokenizer, model, d
         if embedding_type == "content":
             texts = [item["contents"] for item in batch_data]
         elif embedding_type == "keyword":
-            texts = [", ".join(item["keywords"]) for item in batch_data]
+            texts = []
+            for item in batch_data:
+                text = normalize_to_list(item["keywords"])
+                try:
+                    texts.append(", ".join(text))
+                except:
+                    print("這個有問題：", text)
+            # texts = [", ".join(parse_string_list(item["keywords"])) for item in batch_data]
         else:
             raise ValueError(f"未支援的 embedding 類型: {embedding_type}")
         
@@ -153,10 +161,11 @@ def retrieve_for_single_query(query_embedding, subquery_embedding, content_embed
     return scored_documents
 
 def main():
+    # breakpoint()
     # --- 設定檔案路徑和參數 ---
     query_file = "data/topics/top10_query_rewrite.json"
     content_jsonl_file = "data/segment/dense_10q.jsonl"
-    keyword_jsonl_file = "data/kg/keyword.jsonl"
+    keyword_jsonl_file = "data/kg/keywords2.jsonl"
     output_ranking_file = "runs/retrieval/dense_query_rewrite.txt"
     cache_dir = "cache/embeddings"  # 快取目錄
     
@@ -224,6 +233,7 @@ def main():
         # 計算查詢 embedding
         query_embedding = get_sentence_embeddings([query_text], tokenizer, model, device)
         subquery_embedding = get_sentence_embeddings(query_sub, tokenizer, model, device)
+        # breakpoint()
         
         # 確定檢索範圍
         start_idx = i * docs_per_query_segment

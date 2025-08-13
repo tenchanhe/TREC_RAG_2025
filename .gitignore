@@ -6,6 +6,7 @@ test/
 index_dense/
 index_triplets/
 cache/
+indexes/
 
 # Python
 __pycache__/

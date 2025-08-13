@@ -1,6 +1,8 @@
 import os
 import gzip
 import json
+import sys
+import jsonlines
 import torch
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModel
@@ -8,6 +10,30 @@ from sentence_transformers import util
 import numpy as np
 from tqdm import tqdm
 import heapq
+
+
+def get_txt_topics(topics_file):
+    """
+    Load topics from a file.
+    Each line should be in the format: query-id Q0 query-text
+    """
+    with open(topics_file, 'r', encoding='utf-8') as f:
+        queries = f.readlines()
+    return
+
+def get_jsonl_topics(topics_file):
+    """
+    Load topics from a JSONL file.
+    Each line should be a JSON object with 'id' and 'text' fields.
+    """
+    queries = []
+    with jsonlines.open(topics_file) as reader:
+        for obj in reader:
+            if 'id' in obj and 'title' in obj:
+                queries.append(f"{obj['id']}\t{obj['title']}")
+            else:
+                raise ValueError("JSONL file must contain 'id' and 'title' fields.")
+    return queries
 
 # --- 來自您範例的程式碼 (無變動) ---
 def mean_pooling(model_output, attention_mask):
@@ -29,7 +55,6 @@ def search_in_chunks(topics_file, model_name, temp_output_folder, top_k, run_nam
         os.remove(output_path)
         print(f"已删除旧文件: {output_path}")
 
-    # 從 HuggingFace Hub 加載模型
     print("Loading model for query encoding...")
     tokenizer = AutoTokenizer.from_pretrained(model_name)
     model = AutoModel.from_pretrained(model_name).to(device)
@@ -60,10 +85,13 @@ def search_in_chunks(topics_file, model_name, temp_output_folder, top_k, run_nam
 
     # 2. 逐一處理查詢
     print(f"Processing queries from '{topics_file}'...")
-    with open(topics_file, 'r', encoding='utf-8') as f:
-        queries = f.readlines()
+    if topics_file.endswith('.jsonl'):
+        queries = get_jsonl_topics(topics_file)
+    elif topics_file.endswith('.txt'):
+        queries = get_txt_topics(topics_file)
 
     for line in tqdm(queries, desc="Total Queries"):
+        # breakpoint()
         line = line.strip()
         if not line:
             continue
@@ -117,14 +145,14 @@ def search_in_chunks(topics_file, model_name, temp_output_folder, top_k, run_nam
                 f.write(line)
 
 if __name__ == '__main__':
-    # --- 設定 ---
-    # TOPICS_FILE = '/tmp2/TREC_RAG2025/topics/topics.rag24.test.txt'
-    TOPICS_FILE = 'data/topics/test_topic.txt'
-    MODEL_NAME = 'pretrained_model/sentence-transformers/all-MiniLM-L6-v2'
-    OUTPUT_PATH = "runs/retrieval/dense_10q.txt"
+    # # --- 設定 ---
+    # TOPICS_FILE = 'data/topics/trec_rag_2025_queries.jsonl'
+    # # TOPICS_FILE = 'data/topics/test_topic.txt'
+    # MODEL_NAME = 'pretrained_model/sentence-transformers/all-MiniLM-L6-v2'
+    # OUTPUT_PATH = "runs/retrieval/2025/dense_retrieval_miniLM_run.txt"
     
-    TEMP_OUTPUT_FOLDER = 'index_dense/'
-    TOP_K = 1000
+    # TEMP_OUTPUT_FOLDER = 'index_dense/'
+    # TOP_K = 1000
     
     # 執行搜尋
     search_in_chunks(
